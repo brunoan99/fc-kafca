@@ -1,13 +1,6 @@
 version: "3"
 
 services:
-  app:
-    build: .
-    container_name: gokafka
-    volumes:
-      - .:/go/src/
-    extra_hosts:
-      - "host.docker.internal:172.17.0.1"
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -49,3 +42,16 @@ services:
       PORT: 9021
     extra_hosts:
       - "host.docker.internal:172.17.0.1"
+
+  app:
+    build: .
+    container_name: gokafka
+    depends_on:
+      - kafka
+    volumes:
+      - .:/go/src/
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+    environment:
+      - KAFKA_PATH=kafka
+      - KAFKA_PORT=9092

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 )
@@ -16,13 +17,14 @@ func main() {
 }
 
 func NewKafkaProducer() *kafka.Producer {
-	configMag := &kafka.ConfigMap{
-		"bootstrap.servers":   "kafka-kafka-1:9092",
+	kafkaPath := fmt.Sprintf("%s:%s", os.Getenv("KAFKA_PATH"), os.Getenv("KAFKA_PORT"))
+	configMap := &kafka.ConfigMap{
+		"bootstrap.servers":   kafkaPath,
 		"delivery.timeout.ms": "0",
 		"acks":                "all",
 		"enable.idempotence":  "true",
 	}
-	producer, err := kafka.NewProducer(configMag)
+	producer, err := kafka.NewProducer(configMap)
 	if err != nil {
 		log.Println(err.Error())
 	}
