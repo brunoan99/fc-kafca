@@ -4,6 +4,11 @@
 
 * Docker e Compose
 
+## Variáveis de Ambiente
+
+Lembrete: antes de iniciar o projeto configure as variáveis de ambiente.
+Conforme arquivo .env.example
+
 ## Iniciando Projeto
 
 Para Iniciar o Projeto utilize o comando
