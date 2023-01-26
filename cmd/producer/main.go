@@ -12,12 +12,15 @@ func main() {
 	producer := NewKafkaProducer()
 	Publish("mensagem", "teste", producer, nil, deliveryChan)
 	go DeliveryReport(deliveryChan)
-	producer.Flush(1000)
+	producer.Flush(2000)
 }
 
 func NewKafkaProducer() *kafka.Producer {
 	configMag := &kafka.ConfigMap{
-		"bootstrap.servers": "kafka-kafka-1:9092",
+		"bootstrap.servers":   "kafka-kafka-1:9092",
+		"delivery.timeout.ms": "0",
+		"acks":                "all",
+		"enable.idempotence":  "true",
 	}
 	producer, err := kafka.NewProducer(configMag)
 	if err != nil {
@@ -44,7 +47,7 @@ func DeliveryReport(deliveryChan chan kafka.Event) {
 				fmt.Println("Erro ao enviar")
 			} else {
 				fmt.Println("Mensagem enviada: ", ev.Value)
-				fmt.Println("Mensagem armazenada em:", ev.TopicPartition)
+				fmt.Println("Mensagem armazenada em: ", ev.TopicPartition)
 			}
 		}
 	}
